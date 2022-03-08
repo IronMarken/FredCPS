@@ -4,8 +4,6 @@ class Category:
         self.id = category_id
         self.name = category_name
         self.parent_id = parent_id
-        # list of children id(?)
-        self.children_id = None
 
 
 # series struct

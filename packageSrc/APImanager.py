@@ -25,14 +25,10 @@ def get_my_category(category_id, token):
 
     cat_id = data["categories"][0]["id"]
     name = data["categories"][0]["name"]
-    if category_id == 0:
-        parent = None
-    else:
-        parent = data["categories"][0]["parent_id"]
+    parent = data["categories"][0]["parent_id"]
     return Category(cat_id, name, parent)
 
 
-# TODO add returned children to category struct and continue to the leafs
 def get_children_category(category_id, token):
     complete_url = constUtil.CHILDREN_CATEGORY % (category_id, token)
     data = get_json_data(complete_url)

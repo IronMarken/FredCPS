@@ -36,17 +36,17 @@ OBSERVATIONS_TABLE = """ CREATE TABLE IF NOT EXISTS observations(
 TABLES_LIST = [CATEGORY_TABLE, SERIES_TABLE, OBSERVATIONS_TABLE, PARENT_TABLE]
 TABLE_NAMES = ["category", "parents", "series", "observations"]
 
-INSERT_CATEGORY = """ insert or ignore into category(id, name) values(%d, '%s');"""
-INSERT_PARENT = """insert or ignore into parents(child_id, parent_id) values(%d, %d);"""
-INSERT_SERIES = """ insert or ignore into series(id, title, category_id) values('%s', '%s', %d);"""
-INSERT_OBSERVATION = """insert or ignore into observations(observationDate, value, series_id) values('%s', '%s', '%s');"""
+INSERT_CATEGORY = """ insert or replace into category(id, name) values(?, ?)"""
+INSERT_PARENT = """insert or replace into parents(child_id, parent_id) values(?, ?)"""
+INSERT_SERIES = """ insert or replace into series(id, title, category_id) values(?, ?, ?)"""
+INSERT_OBSERVATION = """insert or replace into observations(observationDate, value, series_id) values(?, ?, ?)"""
 
 # add table name
-TRUNCATE = """delete from '%s';"""
+TRUNCATE = """delete from ?;"""
 
-CATEGORY_EXISTS = """select distinct id from category where id=%s;"""
-SERIES_EXISTS = """select distinct id from series where id='%s';"""
-OBSERVATION_EXISTS = """select distinct observationDate from observations where observationDate='%s';"""
+CATEGORY_EXISTS = """select distinct id from category where id=?"""
+SERIES_EXISTS = """select distinct id from series where id=?"""
+OBSERVATION_EXISTS = """select distinct observationDate from observations where observationDate=?"""
 
 
 # add category_id, offset and token_api

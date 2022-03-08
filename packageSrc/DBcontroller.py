@@ -37,13 +37,13 @@ def generate_tables():
         conn.close()
 
 
-def execute_query(query):
+def execute_query(query, args):
     conn = get_connection()
     data = None
     if conn is not None:
         try:
             c = conn.cursor()
-            c.execute(query)
+            c.execute(query, args)
             data = c.fetchall()
         except sqlite3.Error as e:
             print(e)
@@ -52,32 +52,35 @@ def execute_query(query):
         return data
 
 
-def insert_category(cat_id, name, parent_id=None):
-    query = constUtil.INSERT_CATEGORY % (cat_id, name)
-    execute_query(query)
-    if parent_id is not None:
-        query = constUtil.INSERT_PARENT % (cat_id, parent_id)
-        execute_query(query)
+def insert_category(cat_id, name, parent_id):
+    query = constUtil.INSERT_CATEGORY
+    args = [cat_id, name]
+    execute_query(query, args)
+    args = [cat_id, parent_id]
+    query = constUtil.INSERT_PARENT
+    execute_query(query, args)
 
 
 def insert_series(ser_id, title, cat_id):
-    query = constUtil.INSERT_SERIES % (ser_id, title, cat_id)
-    execute_query(query)
+    query = constUtil.INSERT_SERIES
+    args = [ser_id, title, cat_id]
+    execute_query(query, args)
 
 
 def insert_observations(date, value, series_id):
-    query = constUtil.INSERT_OBSERVATION % (date, value, series_id)
-    execute_query(query)
+    query = constUtil.INSERT_OBSERVATION
+    args = [date, value, series_id]
+    execute_query(query, args)
 
 
 def truncate_table(table_name):
-    query = constUtil.TRUNCATE % table_name
-    execute_query(query)
+    query = constUtil.TRUNCATE
+    execute_query(query, [table_name])
 
 
 def category_exists(category_id):
-    query = constUtil.CATEGORY_EXISTS % category_id
-    rows = execute_query(query)
+    query = constUtil.CATEGORY_EXISTS
+    rows = execute_query(query, [category_id])
     if not rows:
         return False
     else:
@@ -85,8 +88,8 @@ def category_exists(category_id):
 
 
 def series_exists(series_id):
-    query = constUtil.SERIES_EXISTS % series_id
-    rows = execute_query(query)
+    query = constUtil.SERIES_EXISTS
+    rows = execute_query(query, [series_id])
     if not rows:
         return False
     else:
@@ -94,8 +97,8 @@ def series_exists(series_id):
 
 
 def observation_exists(observation_date):
-    query = constUtil.OBSERVATION_EXISTS % observation_date
-    rows = execute_query(query)
+    query = constUtil.OBSERVATION_EXISTS
+    rows = execute_query(query, [observation_date])
     if not rows:
         return False
     else:
