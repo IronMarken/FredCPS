@@ -3,6 +3,7 @@ import math
 import constUtil
 import json
 import requests
+import time
 from structUtils import *
 
 
@@ -13,8 +14,15 @@ def get_json_data(complete_url):
 
     # raise exception
     if "error_code" in data:
-        raise RuntimeError(data["error_code"], data["error_message"])
-
+        # Token limit exceeded
+        if data["error_code"] == 429:
+            # 120 requests limit in a minute
+            print("Request limit exceeded...retrying after sleep")
+            time.sleep(60)
+            print("Retrying...")
+            return get_json_data(complete_url)
+        else:
+            raise RuntimeError(data["error_code"], data["error_message"])
     return data
 
 
@@ -40,6 +48,12 @@ def get_children_category(category_id, token):
         child = Category(child_id, child_name, category_id)
         ret_list.append(child)
     return ret_list
+
+
+# TODO FINISH
+def get_single_series(series_id, category_id, token):
+    complete_url = constUtil.SINGLE_SERIES % (series_id, token)
+    data = get_json_data(complete_url)
 
 
 def get_category_series(category_id, token):

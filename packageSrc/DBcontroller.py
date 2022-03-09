@@ -54,17 +54,18 @@ def execute_query(query, args):
 
 def insert_category(cat_id, name, parent_id):
     query = constUtil.INSERT_CATEGORY
-    args = [cat_id, name]
-    execute_query(query, args)
-    args = [cat_id, parent_id]
-    query = constUtil.INSERT_PARENT
+    args = [cat_id, name, parent_id]
     execute_query(query, args)
 
 
-def insert_series(ser_id, title, cat_id):
+def insert_series(ser_id, title, cat_ids):
     query = constUtil.INSERT_SERIES
-    args = [ser_id, title, cat_id]
+    args = [ser_id, title]
     execute_query(query, args)
+    query = constUtil.INSERT_CATEGORY_SERIES
+    for cat_id in cat_ids:
+        args = [cat_id, ser_id]
+        execute_query(query, args)
 
 
 def insert_observations(date, value, series_id):
