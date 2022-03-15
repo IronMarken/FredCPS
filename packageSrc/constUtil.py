@@ -48,6 +48,10 @@ SERIES_EXISTS = """select distinct id from series where id=?"""
 OBSERVATION_EXISTS = """select distinct observationDate from observations where observationDate=?"""
 
 
+GET_CATEGORY = """select name, parent_id from category where id=?"""
+GET_SERIES = """select id, title from series join category_series on series.id = category_series.series_id where category_series.category_id = ?"""
+GET_OBSERVATIONS = """select observationDate, value from observations where series_id = ?"""
+
 # add category_id, offset and token_api
 OWN_CATEGORY = "https://api.stlouisfed.org/fred/category?category_id=%d&api_key=%s&file_type=json"
 CHILDREN_CATEGORY = "https://api.stlouisfed.org/fred/category/children?category_id=%d&api_key=%s&file_type=json"

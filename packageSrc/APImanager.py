@@ -1,3 +1,4 @@
+from datetime import datetime
 import math
 
 import constUtil
@@ -102,11 +103,14 @@ def get_series_observation(series_id, token):
         total = data["count"]
 
         for observation in data["observations"]:
-            observation_date = observation["date"]
-            observation_value = observation["value"]
+            observation_date_str = observation["date"]
+            observation_value_str = observation["value"]
             # NaN values
-            if observation_value == ".":
-                observation_value = str(math.nan)
+            if observation_value_str == ".":
+                observation_value = math.nan
+            else:
+                observation_value = float(observation_value_str)
+            observation_date = datetime.strptime(observation_date_str, '%y-%m-%d')
             new_observation = Observation(observation_date, observation_value, series_id)
             total_observations.append(new_observation)
     return total_observations

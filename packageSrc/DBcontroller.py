@@ -1,7 +1,10 @@
+import math
+from datetime import datetime
 import sqlite3
+import os
 
 import constUtil
-import os
+from structUtils import *
 
 
 def setup_db():
@@ -68,9 +71,9 @@ def insert_series(ser_id, title, cat_ids):
         execute_query(query, args)
 
 
-def insert_observations(date, value, series_id):
+def insert_observations(obs_date, value, series_id):
     query = constUtil.INSERT_OBSERVATION
-    args = [date, value, series_id]
+    args = [obs_date, value, series_id]
     execute_query(query, args)
 
 
@@ -104,3 +107,38 @@ def observation_exists(observation_date):
         return False
     else:
         return True
+
+
+def get_category(category_id):
+    query = constUtil.GET_CATEGORY
+    rows = execute_query(query, [category_id])
+    return Category(category_id, rows[0][0], rows[0][1])
+
+
+def get_series(category_id):
+    query = constUtil.GET_SERIES
+    rows = execute_query(query, [category_id])
+    series_list = []
+    for row in rows:
+        series_id = row[0]
+        series_name = row[1]
+        new_series = Series(series_id, series_name, category_id)
+        series_list.append(new_series)
+    return series_list
+
+
+def get_observations(series_id):
+    query = constUtil.GET_OBSERVATIONS
+    rows = execute_query(query, [series_id])
+    observations_list = []
+    for obs in rows:
+        observation_date_str = obs[0]
+        observation_value_str = obs[1]
+        observation_date = datetime.strptime(observation_date_str, '%y-%m-%d')
+        if observation_value_str == 'nan':
+            observation_value = math.nan
+        else:
+            observation_value = float(observation_value_str)
+        new_observation = Observation(observation_date, observation_value, series_id)
+        observations_list.append(new_observation)
+    return observations_list
