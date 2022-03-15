@@ -50,10 +50,25 @@ def get_children_category(category_id, token):
     return ret_list
 
 
-# TODO FINISH
 def get_single_series(series_id, category_id, token):
     complete_url = constUtil.SINGLE_SERIES % (series_id, token)
     data = get_json_data(complete_url)
+    series = data["seriess"]
+    series_title = series["title"]
+    return Series(series_id, series_title, category_id)
+
+
+def get_category_from_series(series_id, token):
+    complete_url = constUtil.CATEGORY_FROM_SERIES % (series_id, token)
+    data = get_json_data(complete_url)
+    cat_list = []
+    for category in data["categories"]:
+        category_id = category["id"]
+        category_name = category["name"]
+        category_parent = category["parent_id"]
+        category = Category(category_id, category_name, category_parent)
+        cat_list.append(category)
+    return cat_list
 
 
 def get_category_series(category_id, token):

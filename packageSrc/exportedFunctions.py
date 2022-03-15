@@ -40,8 +40,17 @@ def get_series(category_id, update, token):
     return series
 
 
-# update single series
-# def update_series(series_id, token):
+# update series
+def update_series(series_id, token):
+    # retrieve series categories and insert series updated
+    categories = APImanager.get_category_from_series(series_id, token)
+    for category in categories:
+        DBcontroller.insert_category(category.id, category.name, category.parent_id)
+        series = APImanager.get_single_series(series_id, category.id, token)
+        DBcontroller.insert_series(series.id, series.title, series.category_id)
+
+    # update series observations
+    get_observations(series_id, True, token)
 
 
 # retrieve observations from a series
