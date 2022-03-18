@@ -1,3 +1,4 @@
+import numpy
 import DBcontroller
 import APImanager
 
@@ -32,3 +33,28 @@ def download_observations(series_id, token):
     for obs in observations:
         DBcontroller.insert_observations(str(obs.date), str(obs.value), series_id)
     return observations
+
+
+def linear_interpolation(vector, j):
+    if numpy.isnan(vector[0]) or numpy.isnan(vector[len(vector)-1]):
+        print("First and/or last value is nan...not possible to apply linear interpolation")
+        return vector
+
+    # search left and right outliers
+    i = 0
+    while i < len(vector)-1:
+        if numpy.isnan(vector[i+1]):
+            t = position = i+1
+            left_outlier_index = i
+            left_outlier = vector[left_outlier_index]
+            # search right outlier
+            while t < len(vector):
+                if not numpy.isnan(vector[t+1]):
+                    right_outlier_index = t+1
+                    right_outlier = vector[right_outlier_index]
+                    print("left_outlier %s left index %d right_outlier %s right index %d\n" % (left_outlier, left_outlier_index, right_outlier, right_outlier_index))
+                    vector = vector[:position]+[float(left_outlier + (right_outlier-left_outlier)/(right_outlier_index-left_outlier_index)*j)]+vector[position+1:]
+                    break
+                t += 1
+        i += 1
+    return vector
