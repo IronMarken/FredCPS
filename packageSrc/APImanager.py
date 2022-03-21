@@ -110,7 +110,7 @@ def get_series_observation(series_id, token):
                 observation_value = math.nan
             else:
                 observation_value = float(observation_value_str)
-            observation_date = datetime.strptime(observation_date_str, '%y-%m-%d')
+            observation_date = datetime.strptime(observation_date_str, '%Y-%m-%d').date()
             new_observation = Observation(observation_date, observation_value, series_id)
             total_observations.append(new_observation)
     return total_observations

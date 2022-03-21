@@ -134,7 +134,7 @@ def get_observations(series_id):
     for obs in rows:
         observation_date_str = obs[0]
         observation_value_str = obs[1]
-        observation_date = datetime.strptime(observation_date_str, '%y-%m-%d')
+        observation_date = datetime.strptime(observation_date_str, '%Y-%m-%d').date()
         if observation_value_str == 'nan':
             observation_value = math.nan
         else:

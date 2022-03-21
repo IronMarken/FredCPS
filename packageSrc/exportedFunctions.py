@@ -1,3 +1,5 @@
+import pandas
+
 import DBcontroller
 import APImanager
 import supportFunctions
@@ -49,7 +51,7 @@ def update_series(series_id, token):
         DBcontroller.insert_series(series.id, series.title, series.category_id)
 
     # update series observations
-    get_observations(series_id, True, token)
+    return get_observations(series_id, True, token)
 
 
 # retrieve observations from a series
@@ -58,3 +60,10 @@ def get_observations(series_id, update, token):
         return supportFunctions.download_observations(series_id, token)
     else:
         return DBcontroller.get_observations(series_id)
+
+
+def to_dataframe(object_list):
+    dict_list = []
+    for obj in object_list:
+        dict_list.append(obj.to_dict())
+    return pandas.DataFrame(dict_list)

@@ -52,7 +52,6 @@ def linear_interpolation(vector, j):
                 if not numpy.isnan(vector[t+1]):
                     right_outlier_index = t+1
                     right_outlier = vector[right_outlier_index]
-                    print("left_outlier %s left index %d right_outlier %s right index %d\n" % (left_outlier, left_outlier_index, right_outlier, right_outlier_index))
                     vector = vector[:position]+[float(left_outlier + (right_outlier-left_outlier)/(right_outlier_index-left_outlier_index)*j)]+vector[position+1:]
                     break
                 t += 1

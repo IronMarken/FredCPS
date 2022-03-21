@@ -5,6 +5,13 @@ class Category:
         self.name = category_name
         self.parent_id = parent_id
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'parent': self.parent_id
+        }
+
 
 # series struct
 class Series:
@@ -13,6 +20,13 @@ class Series:
         self.title = series_title
         self.category_id = category_id
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'category': self.category_id
+        }
+
 
 # observation struct
 class Observation:
@@ -20,3 +34,10 @@ class Observation:
         self.date = observation_date
         self.value = observation_value
         self.series_id = series_id
+
+    def to_dict(self):
+        return {
+            'date': self.date,
+            'value': self.value,
+            'series': self.series_id
+        }
